@@ -34,7 +34,7 @@ public:
   using PrintfSpecifier = analyze_printf::PrintfSpecifier;
   FormatStringConverter(ASTContext *Context, const CallExpr *Call,
                         unsigned FormatArgOffset, bool StrictMode,
-                        const LangOptions &LO);
+                        const LangOptions &LO, const bool NumberedArguments = false);
 
   bool canApply() const { return ConversionNotPossibleReason.empty(); }
   const std::string &conversionNotPossibleReason() const {
@@ -50,6 +50,7 @@ private:
   const unsigned NumArgs;
   unsigned ArgsOffset;
   const LangOptions &LangOpts;
+  const bool UseNumberedArguments;
   std::string ConversionNotPossibleReason;
   bool FormatStringNeededRewriting = false;
   bool UsePrintNewlineFunction = false;

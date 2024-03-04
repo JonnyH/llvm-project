@@ -36,6 +36,7 @@ public:
 
 private:
   bool StrictMode;
+  bool UseNumberedArguments;
   std::vector<StringRef> SprintfLikeFunctions;
   StringRef ReplacementFormatFunction;
   utils::IncludeInserter IncludeInserter;

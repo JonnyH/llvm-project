@@ -25,6 +25,7 @@ AST_MATCHER(StringLiteral, isOrdinary) { return Node.isOrdinary(); }
 UseStdFormatCheck::UseStdFormatCheck(StringRef Name, ClangTidyContext *Context)
     : ClangTidyCheck(Name, Context),
       StrictMode(Options.getLocalOrGlobal("StrictMode", false)),
+      UseNumberedArguments(Options.getLocalOrGlobal("UseNumberedArguments", false)),
       SprintfLikeFunctions(utils::options::parseStringList(
           Options.get("SprintfLikeFunctions", ""))),
       ReplacementFormatFunction(
@@ -45,6 +46,7 @@ UseStdFormatCheck::UseStdFormatCheck(StringRef Name, ClangTidyContext *Context)
 void UseStdFormatCheck::storeOptions(ClangTidyOptions::OptionMap &Opts) {
   using utils::options::serializeStringList;
   Options.store(Opts, "StrictMode", StrictMode);
+  Options.store(Opts, "UseNumberedArguments", UseNumberedArguments);
   Options.store(Opts, "SprintfLikeFunctions",
                 serializeStringList(SprintfLikeFunctions));
   Options.store(Opts, "ReplacementFormatFunction", ReplacementFormatFunction);
@@ -80,7 +82,7 @@ void UseStdFormatCheck::check(const MatchFinder::MatchResult &Result) {
 
 
   utils::FormatStringConverter Converter(
-      Result.Context, Sprintf, FormatArgOffset, StrictMode, getLangOpts());
+      Result.Context, Sprintf, FormatArgOffset, StrictMode, getLangOpts(), UseNumberedArguments);
   const Expr *SprintfCall = Sprintf->getCallee();
   const StringRef ReplacementFunction = ReplacementFormatFunction;
   if (!Converter.canApply()) {

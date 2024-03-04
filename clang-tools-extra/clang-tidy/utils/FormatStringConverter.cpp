@@ -199,11 +199,12 @@ FormatStringConverter::FormatStringConverter(ASTContext *ContextIn,
                                              const CallExpr *Call,
                                              unsigned FormatArgOffset,
                                              bool StrictMode,
-                                             const LangOptions &LO)
+                                             const LangOptions &LO,
+    const bool NumberedArguments)
     : Context(ContextIn),
       CastMismatchedIntegerTypes(castMismatchedIntegerTypes(Call, StrictMode)),
       Args(Call->getArgs()), NumArgs(Call->getNumArgs()),
-      ArgsOffset(FormatArgOffset + 1), LangOpts(LO) {
+      ArgsOffset(FormatArgOffset + 1), LangOpts(LO), UseNumberedArguments(NumberedArguments) {
   assert(ArgsOffset <= NumArgs);
   FormatExpr = llvm::dyn_cast<StringLiteral>(
       Args[FormatArgOffset]->IgnoreImplicitAsWritten());
@@ -526,7 +527,7 @@ bool FormatStringConverter::convertArgument(const PrintfSpecifier &FS,
 
   StandardFormatString.push_back('{');
 
-  if (FS.usesPositionalArg()) {
+  if (FS.usesPositionalArg() || UseNumberedArguments) {
     // std::format argument identifiers are zero-based, whereas printf ones
     // are one based.
     assert(FS.getPositionalArgIndex() > 0U);
