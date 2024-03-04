@@ -142,6 +142,9 @@ void UseStdPrintCheck::check(const MatchFinder::MatchResult &Result) {
         << Converter.conversionNotPossibleReason();
     return;
   }
+  
+  if (ReplacementFunction == OldFunction->getIdentifier()->getName())
+    return;
 
   DiagnosticBuilder Diag =
       diag(PrintfCall->getBeginLoc(), "use '%0' instead of %1")
