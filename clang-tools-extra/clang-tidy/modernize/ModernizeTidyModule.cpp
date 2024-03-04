@@ -47,6 +47,7 @@
 #include "UseTransparentFunctorsCheck.h"
 #include "UseUncaughtExceptionsCheck.h"
 #include "UseUsingCheck.h"
+#include "UseStdFormatCheck.h"
 
 using namespace clang::ast_matchers;
 
@@ -115,6 +116,7 @@ public:
     CheckFactories.registerCheck<UseUncaughtExceptionsCheck>(
         "modernize-use-uncaught-exceptions");
     CheckFactories.registerCheck<UseUsingCheck>("modernize-use-using");
+	CheckFactories.registerCheck<UseStdFormatCheck>("modernize-use-std-format");
   }
 };
 

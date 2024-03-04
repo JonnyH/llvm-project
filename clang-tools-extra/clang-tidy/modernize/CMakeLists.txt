@@ -46,6 +46,7 @@ add_clang_library(clangTidyModernizeModule
   UseTransparentFunctorsCheck.cpp
   UseUncaughtExceptionsCheck.cpp
   UseUsingCheck.cpp
+  UseStdFormatCheck.cpp
 
   LINK_LIBS
   clangTidy
